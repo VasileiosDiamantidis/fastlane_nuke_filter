@@ -216,7 +216,7 @@ module Match
         input_indexes = UI.input("Enter the \"Option\" number(s) from the table above? (comma-separated)").split(',')
 
         if !self.cert_to_remove.nil?
-          self.certs = self.certs.select { |available_certificate_title| available_certificate_title.include?(self.cert_to_remove]) }
+          self.certs = self.certs.select { |available_certificate_title| available_certificate_title.include?(self.cert_to_remove) }
           if self.certs.empty?
             UI.user_error!("No certificates were selected based on option number(s) entered")
           end
