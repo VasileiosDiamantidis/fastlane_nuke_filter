@@ -209,6 +209,8 @@ module Match
       }))
       puts("")
 
+      puts("📑  Now the if will be called")
+      puts("📑  is nil = #{!self.cert_to_remove.nil?}")
       if !self.cert_to_remove.nil?
         puts("📑  if passed = #{self.cert_to_remove}")
         self.certs = self.certs.select { |available_certificate_title| available_certificate_title.include?(self.cert_to_remove) }
