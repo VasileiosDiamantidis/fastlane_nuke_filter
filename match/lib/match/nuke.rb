@@ -217,6 +217,19 @@ module Match
         if self.certs.empty?
           UI.user_error!("No certificates were selected based on option number(s) entered")
         end
+
+        rows = self.certs.each_with_index.collect do |cert, i|
+          cert_expiration = cert.expiration_date.nil? ? "Unknown" : Time.parse(cert.expiration_date).strftime("%Y-%m-%d")
+          [i + 1, cert.name, cert.id, cert.class.to_s.split("::").last, cert_expiration]
+        end
+
+        puts(Terminal::Table.new({
+          title: "Certificates after filtering that that will be #{removed_or_revoked_message}".green,
+          headings: ["Option", "Name", "ID", "Type", "Expires"],
+          rows: FastlaneCore::PrintTable.transform_output(rows)
+        }))
+        puts("")
+
       end
 
       UI.important("By default, all listed certificates and profiles will be nuked")
