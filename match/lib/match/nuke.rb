@@ -33,8 +33,7 @@ module Match
       self.type = type
       self.cert_to_remove = params[:cert_to_remove]
 
-      puts("self.cert_to_remove = #{self.cert_to_remove}")
-      return 0
+      puts("📑 self.cert_to_remove = #{self.cert_to_remove}")
 
       update_optional_values_depending_on_storage_type(params)
 
@@ -216,6 +215,7 @@ module Match
         input_indexes = UI.input("Enter the \"Option\" number(s) from the table above? (comma-separated)").split(',')
 
         if !self.cert_to_remove.nil?
+          puts("📑  if passed = #{self.cert_to_remove}")
           self.certs = self.certs.select { |available_certificate_title| available_certificate_title.include?(self.cert_to_remove) }
           if self.certs.empty?
             UI.user_error!("No certificates were selected based on option number(s) entered")
