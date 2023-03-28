@@ -62,6 +62,13 @@ module Match
                                      type: Boolean,
                                      default_value: false),
 
+        FastlaneCore::ConfigItem.new(key: :cert_to_remove,
+                                      env_name: "CERT_TO_REMOVE",
+                                      description: "Specify a certificate name to be selected to be revoked",
+                                      type: Array,
+                                      skip_type_validation: true,
+                                      default_value: false),
+
         FastlaneCore::ConfigItem.new(key: :app_identifier,
                                      short_option: "-a",
                                      env_name: "MATCH_APP_IDENTIFIER",
