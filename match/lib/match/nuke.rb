@@ -213,7 +213,7 @@ module Match
       puts("📑  is nil = #{!self.cert_to_remove.nil?}")
       if !self.cert_to_remove.nil?
         puts("📑  if passed = #{self.cert_to_remove}")
-        self.certs = self.certs.select { |available_certificate_title| available_certificate_title.include?(self.cert_to_remove) }
+        self.certs = self.certs.select {|certificate| certificate.id == self.cert_to_remove}
         if self.certs.empty?
           UI.user_error!("No certificates were selected based on option number(s) entered")
         end
