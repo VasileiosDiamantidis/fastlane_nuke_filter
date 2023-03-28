@@ -23,12 +23,18 @@ module Match
     attr_accessor :profiles
     attr_accessor :files
 
+    attr_accessor :cert_to_remove
+
     attr_accessor :storage
     attr_accessor :encryption
 
     def run(params, type: nil)
       self.params = params
       self.type = type
+      self.cert_to_remove = params[:cert_to_remove]
+
+      puts("self.cert_to_remove = #{self.cert_to_remove}")
+      return 0
 
       update_optional_values_depending_on_storage_type(params)
 
@@ -209,7 +215,15 @@ module Match
       if UI.confirm("Do you want to only nuke specific certificates and their associated profiles?")
         input_indexes = UI.input("Enter the \"Option\" number(s) from the table above? (comma-separated)").split(',')
 
+        if !self.cert_to_remove.nil?
+          self.certs = self.certs.select { |available_certificate_title| available_certificate_title.include?(self.cert_to_remove]) }
+          if self.certs.empty?
+            UI.user_error!("No certificates were selected based on option number(s) entered")
+          end
+        end
+
         # Get certificates from option indexes
+        
         self.certs = input_indexes.map do |index|
           self.certs[index.to_i - 1]
         end.compact
