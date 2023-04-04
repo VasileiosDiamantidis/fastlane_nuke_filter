@@ -81,6 +81,7 @@ module Match
       self.safe_remove_certs = params[:safe_remove_certs] || false
 
       prepare_list
+      filter_by_cert_passed_to_remove unless self.cert_to_remove.nil? 
       filter_by_cert
       print_tables
 
@@ -192,25 +193,22 @@ module Match
       self.files = certs + keys + profiles
     end
 
-    def filter_by_cert
-      # Force will continue to revoke and delete all certificates and profiles
-      return if self.params[:force] || !UI.interactive?
-
-      # Print table showing certificates that can be revoked
-      print_tables
-
-      puts("📑  Now the if will be called")
-      puts("📑  is nil = #{!self.cert_to_remove.nil?}")
+    def filter_by_cert_passed_to_remove
       if !self.cert_to_remove.nil?
         puts("📑  if passed = #{self.cert_to_remove}")
         self.certs = self.certs.select {|certificate| certificate.id == self.cert_to_remove[0]}
         if self.certs.empty?
           UI.user_error!("No certificates were selected based on option number(s) entered")
         end
-
-        print_tables
-
       end
+    end
+
+    def filter_by_cert
+      # Force will continue to revoke and delete all certificates and profiles
+      return if self.params[:force] || !UI.interactive?
+      
+      # Print table showing certificates that can be revoked
+      print_tables
 
       UI.important("By default, all listed certificates and profiles will be nuked")
       if UI.confirm("Do you want to only nuke specific certificates and their associated profiles?")
