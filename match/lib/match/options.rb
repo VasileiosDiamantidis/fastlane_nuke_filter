@@ -67,7 +67,7 @@ module Match
                                       description: "Specify a certificate name to be selected to be revoked",
                                       type: String,
                                       skip_type_validation: true,
-                                      default_value: false),
+                                      default_value: nil),
 
         FastlaneCore::ConfigItem.new(key: :app_identifier,
                                      short_option: "-a",
