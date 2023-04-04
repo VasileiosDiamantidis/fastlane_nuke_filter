@@ -65,6 +65,7 @@ module Match
         FastlaneCore::ConfigItem.new(key: :cert_id_to_remove,
                                       env_name: "CERT_ID_TO_REMOVE",
                                       description: "Specify a certificate name to be selected to be revoked",
+                                      optional: true,
                                       type: String,
                                       skip_type_validation: true,
                                       default_value: nil),
