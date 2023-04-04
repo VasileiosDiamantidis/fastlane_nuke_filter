@@ -189,15 +189,21 @@ module Match
     end
 
     def filter_by_cert_id
-      if !self.params[:cert_id_to_remove].nil?
-        self.certs = self.certs.select {|certificate| certificate.id == self.params[:cert_id_to_remove]}
+      cert_id_to_remove = self.params[:cert_id_to_remove]
+      if !cert_id_to_remove.nil?
+        # Retain only the certificate whose ID has been passed as a parameter.
+        self.certs = self.certs.select {|certificate| certificate.id == cert_id_to_remove}
+        
+        # Show error if the provided certificate ID does not correspond to any of the available certificates.
         if self.certs.empty?
           UI.user_error!("The provided certificate ID does not correspond to any of the available certificates.")
         end
+
+        # Filter the profiles to retain only those that contain a certificate whose ID matches the one passed as a parameter.
         self.profiles = self.profiles.select do |profile|
-          profile_cert_ids = profile.certificates.map(&:id)
-          (self.params[:cert_id_to_remove] & profile_cert_ids).any?
+          profile.certificates.any? { |certificate| certificate.id == cert_id_to_remove }
         end
+
         print_tables
       end
     end
