@@ -197,17 +197,7 @@ module Match
       return if self.params[:force] || !UI.interactive?
 
       # Print table showing certificates that can be revoked
-      puts("")
-      rows = self.certs.each_with_index.collect do |cert, i|
-        cert_expiration = cert.expiration_date.nil? ? "Unknown" : Time.parse(cert.expiration_date).strftime("%Y-%m-%d")
-        [i + 1, cert.name, cert.id, cert.class.to_s.split("::").last, cert_expiration]
-      end
-      puts(Terminal::Table.new({
-        title: "Certificates that can be #{removed_or_revoked_message}".green,
-        headings: ["Option", "Name", "ID", "Type", "Expires"],
-        rows: FastlaneCore::PrintTable.transform_output(rows)
-      }))
-      puts("")
+      print_tables
 
       puts("📑  Now the if will be called")
       puts("📑  is nil = #{!self.cert_to_remove.nil?}")
@@ -218,17 +208,7 @@ module Match
           UI.user_error!("No certificates were selected based on option number(s) entered")
         end
 
-        rows = self.certs.each_with_index.collect do |cert, i|
-          cert_expiration = cert.expiration_date.nil? ? "Unknown" : Time.parse(cert.expiration_date).strftime("%Y-%m-%d")
-          [i + 1, cert.name, cert.id, cert.class.to_s.split("::").last, cert_expiration]
-        end
-
-        puts(Terminal::Table.new({
-          title: "Certificates after filtering that that will be #{removed_or_revoked_message}".green,
-          headings: ["Option", "Name", "ID", "Type", "Expires"],
-          rows: FastlaneCore::PrintTable.transform_output(rows)
-        }))
-        puts("")
+        print_tables
 
       end
 
