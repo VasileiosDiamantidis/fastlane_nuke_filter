@@ -201,7 +201,8 @@ module Match
 
         # Filter the profiles to retain only those that contain a certificate whose ID matches the one passed as a parameter.
         self.profiles = self.profiles.select do |profile|
-          profile.certificates.any? { |certificate| certificate.id == cert_id_to_remove }
+          profile_cert_ids = profile.certificates.map(&:id)
+          ([cert_id_to_remove] & profile_cert_ids).any?
         end
 
         print_tables
