@@ -76,7 +76,7 @@ module Match
       self.safe_remove_certs = params[:safe_remove_certs] || false
 
       prepare_list
-      filter_by_certid unless self.params[:cert_id_to_remove].nil? 
+      filter_by_cert_id unless self.params[:cert_id_to_remove].nil? 
       filter_by_cert
       print_tables
 
