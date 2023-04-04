@@ -202,7 +202,7 @@ module Match
       # Force will continue to revoke and delete all certificates and profiles
       return if self.params[:force] || !UI.interactive?
       return if self.certs.count < 2
-      
+
       # Print table showing certificates that can be revoked
       puts("")
       rows = self.certs.each_with_index.collect do |cert, i|
