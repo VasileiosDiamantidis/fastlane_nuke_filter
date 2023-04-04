@@ -192,14 +192,16 @@ module Match
       if !self.params[:cert_id_to_remove].nil?
         self.certs = self.certs.select {|certificate| certificate.id == self.params[:cert_id_to_remove]}
         if self.certs.empty?
-          UI.user_error!("No certificates were selected based on option number(s) entered")
+          UI.user_error!("The provided certificate ID does not correspond to any of the available certificates.")
         end
+        print_tables
       end
     end
 
     def filter_by_cert
       # Force will continue to revoke and delete all certificates and profiles
       return if self.params[:force] || !UI.interactive?
+      return if self.certs.count < 2
       
       # Print table showing certificates that can be revoked
       puts("")
