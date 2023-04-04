@@ -202,14 +202,23 @@ module Match
       return if self.params[:force] || !UI.interactive?
       
       # Print table showing certificates that can be revoked
-      print_tables
+      puts("")
+      rows = self.certs.each_with_index.collect do |cert, i|
+        cert_expiration = cert.expiration_date.nil? ? "Unknown" : Time.parse(cert.expiration_date).strftime("%Y-%m-%d")
+        [i + 1, cert.name, cert.id, cert.class.to_s.split("::").last, cert_expiration]
+      end
+      puts(Terminal::Table.new({
+        title: "Certificates that can be #{removed_or_revoked_message}".green,
+        headings: ["Option", "Name", "ID", "Type", "Expires"],
+        rows: FastlaneCore::PrintTable.transform_output(rows)
+      }))
+      puts("")
 
       UI.important("By default, all listed certificates and profiles will be nuked")
       if UI.confirm("Do you want to only nuke specific certificates and their associated profiles?")
         input_indexes = UI.input("Enter the \"Option\" number(s) from the table above? (comma-separated)").split(',')
 
         # Get certificates from option indexes
-        
         self.certs = input_indexes.map do |index|
           self.certs[index.to_i - 1]
         end.compact
