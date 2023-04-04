@@ -194,7 +194,10 @@ module Match
         if self.certs.empty?
           UI.user_error!("The provided certificate ID does not correspond to any of the available certificates.")
         end
-        self.profiles = self.profiles.select {|profile| profile.certificate.id == self.params[:cert_id_to_remove]}
+        self.profiles = self.profiles.select do |profile|
+          profile_cert_ids = profile.certificates.map(&:id)
+          (self.params[:cert_id_to_remove] & profile_cert_ids).any?
+        end
         print_tables
       end
     end
