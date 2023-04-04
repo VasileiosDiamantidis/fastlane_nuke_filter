@@ -76,7 +76,7 @@ module Match
       self.safe_remove_certs = params[:safe_remove_certs] || false
 
       prepare_list
-      filter_by_cert_id unless self.params[:cert_id_to_remove].nil? 
+      filter_by_cert_id unless self.params[:cert_id_to_remove].nil?
       filter_by_cert
       print_tables
 
@@ -194,6 +194,7 @@ module Match
         if self.certs.empty?
           UI.user_error!("The provided certificate ID does not correspond to any of the available certificates.")
         end
+        self.profiles = self.profiles.select {|profile| profile.certificate.id == self.params[:cert_id_to_remove]}
         print_tables
       end
     end
