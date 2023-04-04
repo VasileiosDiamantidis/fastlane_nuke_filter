@@ -204,8 +204,6 @@ module Match
           profile_cert_ids = profile.certificates.map(&:id)
           ([cert_id_to_remove] & profile_cert_ids).any?
         end
-
-        print_tables
       end
     end
 
@@ -303,11 +301,11 @@ module Match
 
           # Expires is sometimes nil
           expires = p.expiration_date ? Time.parse(p.expiration_date).strftime("%Y-%m-%d") : nil
-          [p.name, p.id, status, p.profile_type, expires]
+          [p.name, p.id, status, p.profile_type, expires, p.certificates.map(&:id)]
         end
         puts(Terminal::Table.new({
           title: "Provisioning Profiles that are going to be revoked".green,
-          headings: ["Name", "ID", "Status", "Type", "Expires"],
+          headings: ["Name", "ID", "Status", "Type", "Expires", "Certificates"],
           rows: FastlaneCore::PrintTable.transform_output(rows)
         }))
         puts("")
