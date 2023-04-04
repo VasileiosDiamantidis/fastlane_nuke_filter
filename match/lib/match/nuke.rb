@@ -23,17 +23,12 @@ module Match
     attr_accessor :profiles
     attr_accessor :files
 
-    attr_accessor :cert_to_remove
-
     attr_accessor :storage
     attr_accessor :encryption
 
     def run(params, type: nil)
       self.params = params
       self.type = type
-      self.cert_to_remove = params[:cert_to_remove]
-
-      puts("📑 self.cert_to_remove = #{self.cert_to_remove}")
 
       update_optional_values_depending_on_storage_type(params)
 
@@ -81,7 +76,7 @@ module Match
       self.safe_remove_certs = params[:safe_remove_certs] || false
 
       prepare_list
-      filter_by_cert_passed_to_remove unless self.cert_to_remove.nil? 
+      filter_by_certid unless self.params[:cert_id_to_remove].nil? 
       filter_by_cert
       print_tables
 
@@ -193,10 +188,9 @@ module Match
       self.files = certs + keys + profiles
     end
 
-    def filter_by_cert_passed_to_remove
-      if !self.cert_to_remove.nil?
-        puts("📑  if passed = #{self.cert_to_remove}")
-        self.certs = self.certs.select {|certificate| certificate.id == self.cert_to_remove[0]}
+    def filter_by_cert_id
+      if !self.params[:cert_id_to_remove].nil?
+        self.certs = self.certs.select {|certificate| certificate.id == self.params[:cert_id_to_remove]}
         if self.certs.empty?
           UI.user_error!("No certificates were selected based on option number(s) entered")
         end
